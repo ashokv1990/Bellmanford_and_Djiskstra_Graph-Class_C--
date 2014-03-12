@@ -12,7 +12,7 @@
 #include<list>
 #include <queue>
 #include<map>
-//#include "graphnode.h"
+
 #include "Header.h"
 #include "limits.h"
 
@@ -24,6 +24,11 @@
 #define matrixsize 3
 
 
+/*******Simple graph class with depth first , breath first search , DJIKSTRA ,bellman ford methods in Built 
+ 
+ Points can added using the addn method and the API has been demostrated in the main as an example
+ 
+ *******/
 
 class graph
 {
@@ -128,6 +133,13 @@ public:
     }
     
 };
+
+
+/*******Weighted graph class with depth first , breath first search , DJIKSTRA ,bellman ford methods in Built
+ 
+ Points can added and the API has been demostrated in the main as an example , weighted graph demands a weight be associated between two points in the graph
+ 
+ *******/
 
 class wgraph:public graph
 {
@@ -452,241 +464,14 @@ public:
     }
 };
 
-class mcomparator
-{
-bool reverse ;
-public:
-    mcomparator(const bool &rev = false):
-    reverse(rev)
-    {
-        
-    };
-    
-    bool operator()(int &lhs , int &rhs)
-    {
-        if(!reverse)
-        {
-            return lhs < rhs;
-        }
-        else{
-            return lhs > rhs;
-        }
-    }
-    
-};
-
-bool sudokusolver(int arr[][gridsize] , int i , int j);
-
-void sudoku(int arr[][gridsize])
-{
-    std::cout << "calling sudoku solver" << '\n';
-    sudokusolver(arr , 0 , 0);
-    
-}
-
-bool checkvalidity(int arr[gridsize][gridsize] , int row , int col , int val)
-{
-  
-    
-    for(int r = 0 ; r < gridsize ; r ++)
-    {
-        
-        if(arr[r][col] == val)
-        {
-            return false;
-        }
-    }
-    
-    for(int c = 0 ; c < gridsize ; c ++)
-    {
-        if(arr[row][c] == val)
-        {
-            return false;
-        }
-    }
-    
-    for(int i = row - row % matrixsize ;  i < row - row % matrixsize + matrixsize ; i ++)
-    {
-      for(int j= col - col % matrixsize ;  j < matrixsize + col- col % matrixsize ; j ++)
-      {
-          
-          if(arr[i][j] == val)
-          {
-              return false;
-          }
-      }
-    }
-    
-    return true;
-}
-bool sudokusolver(int arr[gridsize][gridsize] , int i , int j)
-{
-    if( i == gridsize)
-    {
-        i = 0;
-      
-        if(++j == gridsize)
-        {
-            std::cout << "Returning true" << std::endl;
-            for(int a = 0 ; a <gridsize ; a ++)
-            {
-                for(int b =0 ; b <gridsize ; b++)
-                {
-                    std::cout << arr[a][b] << '\t';
-                   
-                }
-                
-                
-                
-                std::cout << std::endl;
-            }
-            
-            return true;
-        }
-       
-    }
-    
-  
-    for (int c = 1 ; c <= 9 ; c++)
-    {
-        if(checkvalidity(arr , i , j , c))
-        {
-            
-            arr[i][j] = c;
-            
-            if(sudokusolver(arr , i + 1 , j ))
-            {
-                return true;
-            }
-        }
-        //std::cout << i<<":"<<j;
-     
-        
-    }
-    
-   arr[i][j] = 0;
-   return false;
-}
-
-template<class T>
-struct treenode
-{
-    T data;
-    struct treenode *left;
-    struct treenode *right;
-    
-    treenode(T data)
-    {
-        this->data = data;
-    }
-    
-    
-    
-} ;
-
-template <class T>
-std::vector<std::list<treenode<T>>> levelorder(treenode<T> *r , int count)
-{
-    std::vector<std::list<treenode<T>>> lists;
-    std::list<treenode<T>> *current = new std::list<treenode<T>>();
-    
-    if(r != NULL)
-    {
-        (*current).push_back(*r);
-        
-    }
-    
-   
-    
-    while(!(*current).empty())
-    {
-        lists.push_back(*current);
-       
-        if(lists.size() == count )
-        {
-            typename std::list<treenode <T>> p = lists.at(count-1);
-            for(typename std::list<treenode<T>>::iterator l = p.begin();l !=p.end(); l++ )
-            {
-               std::cout << (*l).data << std::endl;
-            }
-        }
-        
-        std::list<treenode<T>> *parent = current;
-        current = new std::list<treenode<T>>();
-        for(typename std::list<treenode<T>>::iterator it = (*parent).begin() ; it !=(*parent).end() ; it++ )
-        {
-            if(it->left != NULL)
-            {
-                (*current).push_back(*(it->left));
-              
-            }
-            
-            if (it->right != NULL) {
-              (*current).push_back(*(it->right));
-            }
-            
-                
-        }
-        
-    }
-    return lists;
-}
 
 
 
-template<class T>
-void postorder(treenode<T> *t)
-{
-    if(t == NULL)
-        return;
-    postorder(t->left);
-    postorder(t->right);
-    
-    std::cout << t->data << std::endl;
-}
 
 int main(int argc, const char * argv[])
 {
     
-   
-    /*
-    // insert code here...
-    treenode<int> *first = new treenode<int>(1);
-    first->left = new treenode<int>(10);
-    first->right = new treenode<int>(11);
-    
-    treenode<int> * l = first->left;
-    l->left = new treenode<int>(13);
-    //postorder(first);
-    //levelorder(first, 3);
-    
-    int arr[gridsize][gridsize] ;
-    
-    typedef std::priority_queue<int , std::vector<int> , mcomparator> m_queue;
-    m_queue mq(mcomparator(true));
-    
-    std::vector<int> cont;
-    for(int i = 0 ; i < 55 ; i++)
-        cont.push_back(i);
-    
-    for(std::vector<int>::iterator it = cont.begin() ; it != cont.end() ; it++)
-    {
-        
-        
-        if(mq.size() == 5)
-        {mq.pop();
-        }
-        mq.push(*it);
-    }
-    
-    while(!mq.empty())
-    {
-        std::cout << mq.top() <<std::endl;
-        mq.pop();
-    }
-    */
-    
-    //sudoku(arr);
+ 
     
     wgraph g;
     g.insert(1);
