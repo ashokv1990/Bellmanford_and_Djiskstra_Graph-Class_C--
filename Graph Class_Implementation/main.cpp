@@ -715,7 +715,7 @@ int main(int argc, const char * argv[])
     g2.addn(5,4,1);
    
     g2.bellmanford(1);
-    std::cout << "Hello, World!\n";
+    std::cout << "Test Successful!\n";
     return 0;
 }
 
